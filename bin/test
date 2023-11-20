@@ -1,0 +1,22 @@
+#!/bin/bash
+
+echo "Testing timezone_changes configuration..."
+# this will raise or show log output if there are errors
+ruby -r "./lib/timezone.rb" -e "Timezone.validate_timezone_changes_config"
+
+# this will raise if we've broken something in our lapse counting logic
+ruby ./test/lapse_counter_test.rb
+
+echo "Running the script..."
+# perform a silent run of the script and save the output to the data/ dir
+KEEP_DAILY_STUDY_TIME=true KEEP_LEECHES=true ./bin/run > /dev/null
+
+CSV_DIFF=$(git diff ./data)
+
+if [ -z "$CSV_DIFF" ]
+then
+  echo "Running the script produced the same results ✅"
+else
+  echo "Running the script produced different results ⚠️"
+  echo $CSV_DIFF
+fi

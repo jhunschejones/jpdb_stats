@@ -1,0 +1,23 @@
+# Timezone change entries:
+# - `start_date` and `end_date` should be Ruby Time objects or nil
+# - `timezone_name` should be a timezone name string recognizable by tzinfo
+
+timezone_changes:
+  - start_date: 2021-01-01 00:00:00 -0600
+    end_date:
+    timezone_name: "America/Chicago"
+  - start_date: 2023-03-02 05:00:00 -0600
+    end_date: 2023-03-09 05:00:00 -0600
+    timezone_name: America/New_York
+  - start_date: 2023-05-10 05:00:00 -0500
+    end_date: 2023-05-16 19:00:00 -0500
+    timezone_name: America/New_York
+  - start_date: 2023-06-07 06:00:00 -0500
+    end_date: 2023-06-10 10:00:00 -0500
+    timezone_name: America/Los_Angeles
+  - start_date: 2023-08-23 05:00:00 -0500
+    end_date: 2023-08-30 06:00:00 -0500
+    timezone_name: America/Los_Angeles
+  # - start_date:
+  #   end_date:
+  #   timezone_name:

@@ -1,0 +1,31 @@
+name: Update JPDB Stats
+
+on:
+  schedule:
+    - cron: '0 7,15 * * *' # Run at once at 7am UTC / 2am US CT and again at 3pm UTC / 10am US CT
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    env:
+      KEEP_DAILY_STUDY_TIME: 'true'
+      KEEP_LEECHES: 'true'
+      TIMEZONE_DEBUG: 'true'
+      JPDB_USERNAME: ${{ secrets.JPDB_USERNAME }}
+      JPDB_PASSWORD: ${{ secrets.JPDB_PASSWORD }}
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        working-directory: jpdb_daily_study_time
+        bundler-cache: true
+    - name: Calculate leeches and daily study time
+      run: ./bin/run
+    - name: Commit updated files in the data/ dir
+      run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git add data/ && git commit -m 'Update data/ files' || echo "No changes to commit"
+        git push origin || echo "No changes to commit"

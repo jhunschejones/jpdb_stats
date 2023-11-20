@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# ./bin/run explanation
+#
+# Required state: NONE
+#
+# Output state: NONE
+#
+# This script coordinates running the other scripts in the directory in order to:
+#   1) export jpdb.io reviews
+#   2) parse and print out daily study time by date
+#   3) invalidate session token used in the script
+
+./bin/download-jpdb-reviews
+bundle exec ./bin/parse-jpdb-leeches
+echo '' # add newline to CLI output
+bundle exec ./bin/parse-jpdb-study-time
+./bin/jpdb-logout

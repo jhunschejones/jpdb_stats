@@ -1,0 +1,75 @@
+#!/usr/bin/env ruby
+
+# ./tmp/parse-jpdb-reviews explanation
+#
+# Required state:
+# `./tmp/reviews.json`: the exported reviews JSON from your jpdb.io account
+#
+# Output state:
+# `./tmp/daily_study_time.csv`: daily review minutes (also printed to standard out)
+
+require "json"
+require "fileutils"
+require "date"
+require_relative "../lib/string_utils"
+require_relative "../lib/timezone"
+
+
+DAILY_STUDY_TIME_RELATIVE_PATH = "./tmp/daily_study_time.csv".freeze
+REVIEWS_RELATIVE_PATH = "./tmp/reviews.json".freeze
+OUTPUT_CSV_HEADERS = "Date,Time (mins)".freeze
+
+reviews_file_path = File.expand_path(REVIEWS_RELATIVE_PATH)
+raise "Missing #{reviews_file_path}".red unless File.exist?(reviews_file_path)
+reviews_json = JSON.parse(File.read(reviews_file_path))
+
+review_categories = reviews_json.keys
+unique_review_timestamps = review_categories.flat_map do |review_category|
+  reviews_json[review_category].flat_map do |entry|
+    entry["reviews"].map { |review| review["timestamp"] }
+  end
+end.uniq
+
+review_timestamps_by_date = Hash.new {|h, k| h[k] = [] }
+dates_by_timezone = Hash.new {|h, k| h[k] = [] }
+
+unique_review_timestamps.each do |timestamp|
+  timezone = Timezone.for_seconds_timestamp(timestamp)
+
+  # round timestamps to the nearest minute
+  rounded_time = timezone.to_local(Time.at(timestamp - (timestamp % 60)))
+  date = rounded_time.to_s.split.first
+
+  dates_by_timezone[timezone.identifier] << date
+  review_timestamps_by_date[date] << rounded_time.to_i
+end
+
+review_dates = review_timestamps_by_date.keys.sort.reverse # newest to oldest
+daily_study_time_entries = [OUTPUT_CSV_HEADERS]
+daily_study_time_log_lines = []
+
+review_dates.each do |review_date|
+  study_minutes = review_timestamps_by_date[review_date].uniq.size
+  # build up the rows for daily_study_time.csv
+  daily_study_time_entries << "#{Date.parse(review_date).strftime("%-m/%-d/%Y")},#{study_minutes}"
+  # build up log lines to later print to the console
+  daily_study_time_log_lines << "#{"Date:".gray} #{review_date}#{", Total minutes:".gray} #{study_minutes.to_s.bold}"
+end
+
+puts "Your jpdb.io daily study time stats for the last 14 days:".cyan
+daily_study_time_log_lines[0..13].each { |log_line| puts(log_line) }
+
+if ENV["TIMEZONE_DEBUG"]
+  puts "\nTimezone debug info:".brown
+  dates_by_timezone.map do |(timezone, dates)|
+    sorted_dates = dates.uniq.sort
+    puts "#{timezone}: #{sorted_dates}"
+  end
+end
+
+File.open(DAILY_STUDY_TIME_RELATIVE_PATH, "w+") { |f| f.puts(daily_study_time_entries) }
+
+if ENV["KEEP_DAILY_STUDY_TIME"]
+  # Optionally copy the file into the data directory to be commited
+  FileUtils.cp(DAILY_STUDY_TIME_RELATIVE_PATH, "./data/daily_study_time.csv")
+end

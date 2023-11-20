@@ -1,0 +1,5 @@
+*.DS_Store
+
+/tmp/*.json
+/tmp/*.txt
+/tmp/*.csv
