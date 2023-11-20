@@ -14,5 +14,5 @@
 ./bin/download-jpdb-reviews
 ./bin/parse-jpdb-leeches
 echo '' # add newline to CLI output
-./bin/parse-jpdb-study-time
+bundle exec ./bin/parse-jpdb-study-time
 ./bin/jpdb-logout
