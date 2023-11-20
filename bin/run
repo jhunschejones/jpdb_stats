@@ -12,7 +12,7 @@
 #   3) invalidate session token used in the script
 
 ./bin/download-jpdb-reviews
-bundle exec ./bin/parse-jpdb-leeches
+./bin/parse-jpdb-leeches
 echo '' # add newline to CLI output
-bundle exec ./bin/parse-jpdb-study-time
+./bin/parse-jpdb-study-time
 ./bin/jpdb-logout
