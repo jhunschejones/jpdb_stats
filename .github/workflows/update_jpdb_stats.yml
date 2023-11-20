@@ -19,7 +19,6 @@ jobs:
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        working-directory: jpdb_daily_study_time
         bundler-cache: true
     - name: Calculate leeches and daily study time
       run: ./bin/run
