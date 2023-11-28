@@ -14,5 +14,7 @@ The `data/` directory in this repo is currently relied on by these projects:
 - https://github.com/jhunschejones/Immersion-Stats
 - https://github.com/jhunschejones/Chrome-According-To-Josh/tree/main/jpdb-leeches
 
+To trigger the GitHub action which runs this script, run `gh workflow run update_jpdb_stats.yml` from the root of this directory.
+
 ### Testing
 `./bin/test` will run some unit tests and a simple integration test of the script, overwriting the local `./data/` files with new values if there are differences in the script output. Depending on what you are changing, this can help verify whether your changes are working as intended when ran against your real-world reviews data 👍🏻
