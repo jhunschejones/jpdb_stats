@@ -1,5 +1,7 @@
 # JPDB Stats
 
+[![Update JPDB Stats](https://github.com/jhunschejones/jpdb_stats/actions/workflows/update_jpdb_stats.yml/badge.svg)](https://github.com/jhunschejones/jpdb_stats/actions/workflows/update_jpdb_stats.yml)
+
 ### Overview
 This project holds a small collection of scripts that parse out my jpdb.io reviews data and help calculate my daily study minutes and a list of leech cards.
 
