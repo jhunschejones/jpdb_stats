@@ -23,6 +23,23 @@ module Timezone
     # loading this module will parse the config file and raise parsing errors automatically,
     # so if we made it this far the config is probably not entirely broken 👍🏻
     raise "More than 1 currently active timezones" unless UNCOMPLETED_TIMEZONE_CHANGES.size < 2
+
+    timezone_start_dates = []
+    timezone_end_dates = []
+    overlapping_timezone_changes = []
+    COMPLETED_TIMEZONE_CHANGES.each do |timezone_change|
+      if timezone_start_dates.include?(timezone_change.start_date)
+        overlapping_timezone_changes << timezone_change
+      end
+      timezone_start_dates << timezone_change.start_date
+
+      if timezone_end_dates.include?(timezone_change.end_date)
+        overlapping_timezone_changes << timezone_change
+      end
+      timezone_end_dates << timezone_change.end_date
+    end
+    raise "Overlapping timezone changes" unless overlapping_timezone_changes.none?
+
     puts "Using the default timezone of #{DEFAULT_TIMEZONE} 🕓" if (COMPLETED_TIMEZONE_CHANGES + UNCOMPLETED_TIMEZONE_CHANGES).none?
   end
 
