@@ -10,7 +10,7 @@ Special thanks to `@bijak` for his help consulting on the logic for estimating t
 ### Usage
 The `./bin/run` script coordinates all the moving parts of this tool, downloading the `reviews.json` from jpdb.io, counting leech cards, transforming the review data into a list total study minutes per day, then logging the script session out of jpdb.io.
 
-NOTE: The script will attempt to use the 1Password CLI to safely gather credentials for the web request to jpdb.io made in `./bin/download-jpdb-reviews`. You may also chose to set the environment values for `JPDB_USERNAME` and `JPDB_PASSWORD` if you don't have 1Password or don't want to mess with configuring it's CLI, and the script will read those instead.
+NOTE: The script will attempt to use the 1Password CLI to safely gather credentials for the web request to jpdb.io made in `./bin/download-jpdb-reviews`. You may also choose to set the environment values for `JPDB_USERNAME` and `JPDB_PASSWORD` and the script will read those instead.
 
 The `data/` directory in this repo is currently relied on by these projects:
 - https://github.com/jhunschejones/Immersion-Stats
