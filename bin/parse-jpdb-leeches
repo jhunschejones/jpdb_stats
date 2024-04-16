@@ -24,11 +24,16 @@ reviews_json = JSON.parse(File.read(reviews_file_path))
 
 kanji_lapse_count_by_character = Hash.new {|h, k| h[k] = 0 }
 word_lapse_count_by_word = Hash.new {|h, k| h[k] = 0 }
+unlearnable_words = []
 
 reviews_json.keys.each do |review_category|
   reviews_json[review_category].each do |card|
     if card["spelling"]
       word_lapse_count_by_word[card["spelling"]] += LapseCounter.count(card["reviews"])
+
+      if LapseCounter.unlearnable?(card["reviews"])
+        unlearnable_words << card["spelling"]
+      end
     end
 
     if card["character"]
@@ -43,6 +48,8 @@ word_leeches = word_lapse_count_by_word
 kanji_leeches = kanji_lapse_count_by_character
   .filter { |kanji, lapse_count| lapse_count > LAPSE_COUNT_THRESHOLD }
   .keys
+
+word_leeches += unlearnable_words
 
 File.open(WORD_LEECHES_RELATIVE_PATH, "w+") { |f| f.puts(word_leeches.to_json) }
 File.open(KANJI_LEECHES_RELATIVE_PATH, "w+") { |f| f.puts(kanji_leeches.to_json) }

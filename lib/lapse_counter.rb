@@ -35,4 +35,16 @@ class LapseCounter
 
     lapses
   end
+
+  UNLEARNABLE_THRESHOLD = 5
+
+  # unlearnable words are words that have been reviewed 5 times but were never learned
+  def self.unlearnable?(reviews)
+    grades = reviews.map { |review| review["grade"] }
+
+    # if there are no reviews that weren't failures
+    return true if (grades.uniq - FAILED_GRADES).empty? && grades.size >= UNLEARNABLE_THRESHOLD
+
+    false
+  end
 end
