@@ -15,6 +15,7 @@ require_relative "../lib/string_utils"
 
 REVIEWS_RELATIVE_PATH = "./tmp/reviews.json"
 WORD_LEECHES_RELATIVE_PATH = "./tmp/word_leeches.json"
+UNLEARNABLE_WORDS_RELATIVE_PATH = "./tmp/unlearnable_words.json"
 KANJI_LEECHES_RELATIVE_PATH = "./tmp/kanji_leeches.json"
 LAPSE_COUNT_THRESHOLD = 8 # number of times a card went from "known" to "forgotten" after it was first learned
 
@@ -49,15 +50,15 @@ kanji_leeches = kanji_lapse_count_by_character
   .filter { |kanji, lapse_count| lapse_count > LAPSE_COUNT_THRESHOLD }
   .keys
 
-word_leeches += unlearnable_words
-
 File.open(WORD_LEECHES_RELATIVE_PATH, "w+") { |f| f.puts(word_leeches.to_json) }
+File.open(UNLEARNABLE_WORDS_RELATIVE_PATH, "w+") { |f| f.puts(unlearnable_words.to_json) }
 File.open(KANJI_LEECHES_RELATIVE_PATH, "w+") { |f| f.puts(kanji_leeches.to_json) }
 
 if ENV["KEEP_LEECHES"]
   # Copy the files into the data directory to be used in the extension
   FileUtils.cp(WORD_LEECHES_RELATIVE_PATH, "./data/word_leeches.json")
   FileUtils.cp(KANJI_LEECHES_RELATIVE_PATH, "./data/kanji_leeches.json")
+  FileUtils.cp(UNLEARNABLE_WORDS_RELATIVE_PATH, "./data/unlearnable_words.json")
 end
 
 puts "Leeches calculated and updated 🐛".gray

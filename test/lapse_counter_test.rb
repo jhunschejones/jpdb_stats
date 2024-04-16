@@ -39,7 +39,7 @@ reviews = [
   { "grade" => "unknown" },
   { "grade" => "unknown" },
 ]
-test_name = "LapseCounter counts a card as unlearnable if it has been reviewed 5 times and they are all failures"
+test_name = "LapseCounter counts a card as unlearnable if it has been reviewed 8 times and they are all failures"
 
 if LapseCounter.unlearnable?(reviews)
   puts "PASS: #{test_name}".green

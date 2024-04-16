@@ -36,7 +36,7 @@ class LapseCounter
     lapses
   end
 
-  UNLEARNABLE_THRESHOLD = 5
+  UNLEARNABLE_THRESHOLD = 8
 
   # unlearnable words are words that have been reviewed 5 times but were never learned
   def self.unlearnable?(reviews)
