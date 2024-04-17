@@ -4,7 +4,7 @@
 
 timezone_changes:
   - start_date: 2021-01-01 00:00:00 -0600
-    end_date:
+    end_date: 2024-03-31 14:00:00 -0600
     timezone_name: "America/Chicago"
   - start_date: 2023-03-02 05:00:00 -0600
     end_date: 2023-03-09 05:00:00 -0600
@@ -21,6 +21,9 @@ timezone_changes:
   - start_date: 2023-12-02 12:00:00 -0600
     end_date: 2023-12-03 22:00:00 -0600
     timezone_name: America/New_York
+  - start_date: 2024-04-01 05:00:00 +0900
+    end_date:
+    timezone_name: "Asia/Tokyo"
   # - start_date:
   #   end_date:
   #   timezone_name:
