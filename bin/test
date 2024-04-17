@@ -4,6 +4,7 @@ echo "Testing timezone_changes configuration..."
 # this will raise or show log output if there are errors
 ruby -r "./lib/timezone.rb" -e "Timezone.validate_timezone_changes_config"
 
+echo "Testing lapse_counter logic..."
 # this will raise if we've broken something in our lapse counting logic
 ruby ./test/lapse_counter_test.rb
 
