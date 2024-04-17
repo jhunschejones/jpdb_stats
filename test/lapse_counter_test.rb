@@ -57,9 +57,31 @@ reviews = [
   { "grade" => "unknown" },
   { "grade" => "unknown" },
 ]
-test_name = "LapseCounter does not count a card as unlearnable if it has ever passed"
+test_name = "LapseCounter does not count a card as unlearnable if it has ever passed in the last 8 reviews"
 
 unless LapseCounter.unlearnable?(reviews)
+  puts "PASS: #{test_name}".green
+else
+  puts "FAIL: #{test_name}".red
+end
+
+reviews = [
+  { "grade" => "unknown" },
+  { "grade" => "unknown" },
+  { "grade" => "okay" },
+  { "grade" => "something" },
+  { "grade" => "unknown" },
+  { "grade" => "unknown" },
+  { "grade" => "unknown" },
+  { "grade" => "unknown" },
+  { "grade" => "unknown" },
+  { "grade" => "unknown" },
+  { "grade" => "unknown" },
+  { "grade" => "unknown" },
+]
+test_name = "LapseCounter counts a card as unlearnable if it has passed before but failed the last 8 reviews"
+
+if LapseCounter.unlearnable?(reviews)
   puts "PASS: #{test_name}".green
 else
   puts "FAIL: #{test_name}".red
