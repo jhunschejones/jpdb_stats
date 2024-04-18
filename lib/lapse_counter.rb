@@ -38,8 +38,8 @@ class LapseCounter
 
   UNLEARNABLE_THRESHOLD = 8
 
-  # unlearnable words are words that have been reviewed UNLEARNABLE_THRESHOLD times but never learned
-  # OR words that have failed the last UNLEARNABLE_THRESHOLD times in a row without passing
+  # unlearnable cards are cards that have been reviewed UNLEARNABLE_THRESHOLD times but never learned
+  # OR cards that have failed the last UNLEARNABLE_THRESHOLD times in a row without passing
   def self.unlearnable?(reviews)
     grades = reviews.map { |review| review["grade"] }
 
