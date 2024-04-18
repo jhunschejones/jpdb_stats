@@ -16,6 +16,7 @@ require_relative "../lib/string_utils"
 REVIEWS_RELATIVE_PATH = "./tmp/reviews.json"
 WORD_LEECHES_RELATIVE_PATH = "./tmp/word_leeches.json"
 UNLEARNABLE_WORDS_RELATIVE_PATH = "./tmp/unlearnable_words.json"
+UNLEARNABLE_KANJI_RELATIVE_PATH = "./tmp/unlearnable_kanji.json"
 KANJI_LEECHES_RELATIVE_PATH = "./tmp/kanji_leeches.json"
 LAPSE_COUNT_THRESHOLD = 8 # number of times a card went from "known" to "forgotten" after it was first learned
 
@@ -26,6 +27,7 @@ reviews_json = JSON.parse(File.read(reviews_file_path))
 kanji_lapse_count_by_character = Hash.new {|h, k| h[k] = 0 }
 word_lapse_count_by_word = Hash.new {|h, k| h[k] = 0 }
 unlearnable_words = []
+unlearnable_kanji = []
 
 reviews_json.keys.each do |review_category|
   reviews_json[review_category].each do |card|
@@ -39,6 +41,10 @@ reviews_json.keys.each do |review_category|
 
     if card["character"]
       kanji_lapse_count_by_character[card["character"]] += LapseCounter.count(card["reviews"])
+
+      if LapseCounter.unlearnable?(card["reviews"])
+        unlearnable_kanji << card["character"]
+      end
     end
   end
 end
@@ -51,14 +57,16 @@ kanji_leeches = kanji_lapse_count_by_character
   .keys
 
 File.open(WORD_LEECHES_RELATIVE_PATH, "w+") { |f| f.puts(word_leeches.to_json) }
-File.open(UNLEARNABLE_WORDS_RELATIVE_PATH, "w+") { |f| f.puts(unlearnable_words.to_json) }
 File.open(KANJI_LEECHES_RELATIVE_PATH, "w+") { |f| f.puts(kanji_leeches.to_json) }
+File.open(UNLEARNABLE_WORDS_RELATIVE_PATH, "w+") { |f| f.puts(unlearnable_words.to_json) }
+File.open(UNLEARNABLE_KANJI_RELATIVE_PATH, "w+") { |f| f.puts(unlearnable_kanji.to_json) }
 
 if ENV["KEEP_LEECHES"]
   # Copy the files into the data directory to be used in the extension
   FileUtils.cp(WORD_LEECHES_RELATIVE_PATH, "./data/word_leeches.json")
   FileUtils.cp(KANJI_LEECHES_RELATIVE_PATH, "./data/kanji_leeches.json")
   FileUtils.cp(UNLEARNABLE_WORDS_RELATIVE_PATH, "./data/unlearnable_words.json")
+  FileUtils.cp(UNLEARNABLE_KANJI_RELATIVE_PATH, "./data/unlearnable_kanji.json")
 end
 
 puts "Leeches calculated and updated 🐛".gray
